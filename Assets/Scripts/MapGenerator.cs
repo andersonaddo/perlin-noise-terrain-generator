@@ -31,27 +31,7 @@ public class MapGenerator : MonoBehaviour {
     {
         float[,] map = Noise.GenerateNoiseMap(mapWidth, mapHeight, mapSeed, mapOffet, biome.noiseScale, biome.octaves, biome.persistence, biome.lacunarity);
 
-        if (drawMode == EditorDrawMode.raw)
-            GetComponent<mapDisplayer>().RenderMap(map);
-        else
-        {
-            Color[] colorMap = new Color[mapHeight * mapWidth];
-
-            //Going through the colormap array and assigning colors based off the selected biome
-            for (int y = 0; y < mapHeight; y++)
-                for (int x = 0; x < mapWidth; x++)
-                {
-                    float value = map[x, y];
-                    foreach(TerrainLayer layer in biome.layers)
-                    {
-                        if (value <= layer.heightUpperBound)
-                        {
-                            colorMap[mapWidth * y + x] = layer.color;
-                            break;
-                        }
-                    }
-                }
-            GetComponent<mapDisplayer>().RenderMap(colorMap, mapWidth, mapHeight);
-        }
+        if (drawMode == EditorDrawMode.raw) GetComponent<mapDisplayer>().RenderRawMap(map);
+        else GetComponent<mapDisplayer>().RenderColorMap(map, biome.layers);
     }
 }
