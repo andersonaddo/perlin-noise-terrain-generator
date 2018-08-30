@@ -19,6 +19,9 @@ public class Biome : ScriptableObject {
     [Range(0.1f, 1)]
     public float persistence;
 
+    [Tooltip("This curve maps the map values (0-1) to real mesh heights.")]
+    public AnimationCurve heightMultiplierCurve;
+
     public TerrainLayer[] layers;
 }
 
