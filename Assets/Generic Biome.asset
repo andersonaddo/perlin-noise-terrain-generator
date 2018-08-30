@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30fa05495ea4d3c40ba6ac7953e11856, type: 3}
+  m_Name: Generic Biome
+  m_EditorClassIdentifier: 
+  noiseScale: 25
+  octaves: 5
+  lacunarity: 2
+  persistence: 0.47
+  layers:
+  - name: Deep Water
+    heightUpperBound: 0.1
+    color: {r: 0, g: 0.41190642, b: 0.509434, a: 0}
+  - name: Water
+    heightUpperBound: 0.3
+    color: {r: 0, g: 0.63236916, b: 0.81960785, a: 0}
+  - name: Shallow Water
+    heightUpperBound: 0.4
+    color: {r: 0.4073451, g: 0.7249255, b: 0.81960785, a: 0}
+  - name: Sand
+    heightUpperBound: 0.45
+    color: {r: 0.8584906, g: 0.84540224, b: 0, a: 0}
+  - name: Low grass
+    heightUpperBound: 0.55
+    color: {r: 0.18294775, g: 0.69803923, b: 0.023529407, a: 0}
+  - name: ' grass'
+    heightUpperBound: 0.6
+    color: {r: 0.123330995, g: 0.4811321, b: 0.011347453, a: 0}
+  - name: Rock
+    heightUpperBound: 0.9
+    color: {r: 0.48235294, g: 0.26553655, b: 0.011764695, a: 0}
+  - name: Ice
+    heightUpperBound: 1
+    color: {r: 1, g: 1, b: 1, a: 0}
