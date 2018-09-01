@@ -66,7 +66,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  heightMultiplier: 1.48
+  heightMultiplier: 2.32
   layers:
   - name: Deep Water
     heightUpperBound: 0.1

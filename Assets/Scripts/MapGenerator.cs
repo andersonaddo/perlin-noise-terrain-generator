@@ -11,7 +11,7 @@ public class MapGenerator : MonoBehaviour {
 
     //This is preset because of the Level of Detail system.
     //That system only works for factors of size-1, and 240 has a lot of factors while staying in Unity's limit of 255^2 vertices per mesh
-    const int mapChunkSize = 241;
+    [HideInInspector] public const int mapChunkSize = 241;
 
     [Tooltip("Allows for dynamic polygon optimization")]
     [Range(0, 6)]public int meshLevelOfDetail; //Factors of 240: 1, 2, 4, 6, 8, 10, 12. meshLevelOfDetail will be multiplied by two later on
