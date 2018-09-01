@@ -4,27 +4,30 @@ using UnityEngine;
 
 public static class MapMeshGenerator {
     
-    public static MeshData GenerateMesh(float[,] map, AnimationCurve heightMultiplierCurve)
+    public static MeshData GenerateMesh(float[,] map, int levelOfDetail, AnimationCurve heightMappingCurve, float heightMultiplier)
     {
         int width = map.GetLength(0);
         int height = map.GetLength(1);
 
+        int vertixStep = (levelOfDetail == 0) ? 1 : levelOfDetail * 2;
+        int verticesPerLine = (width - 1) / vertixStep + 1; //Assuming that width = height, which should be the case
+
         float topLeftX = (width - 1) / -2f; //The top left X of the mesh if it is centered around the origin
         float topLeftZ = (height - 1) / 2f;
 
-        MeshData meshData = new MeshData(width, height);
+        MeshData meshData = new MeshData(verticesPerLine, verticesPerLine);
         int currentVertexIndex = 0;
 
-        for (int y = 0; y < height; y++)
-            for (int x = 0; x < width; x++)
+        for (int y = 0; y < height; y += vertixStep)
+            for (int x = 0; x < width; x += vertixStep)
             {
-                meshData.vertices[currentVertexIndex] = new Vector3(topLeftX + x, heightMultiplierCurve.Evaluate(map[x, y]), topLeftZ - y);
+                meshData.vertices[currentVertexIndex] = new Vector3(topLeftX + x, heightMappingCurve.Evaluate(map[x, y]) * heightMultiplier, topLeftZ - y);
                 meshData.uvs[currentVertexIndex] = new Vector2(x / (float)width, y / (float)height);
 
                 if (x < width - 1 && y < height - 1)
                 {
-                    meshData.addTriangle(currentVertexIndex, currentVertexIndex + width + 1, currentVertexIndex + width); //Triangles count their vertices clockwise
-                    meshData.addTriangle(currentVertexIndex + width + 1, currentVertexIndex, currentVertexIndex + 1);
+                    meshData.addTriangle(currentVertexIndex, currentVertexIndex + verticesPerLine + 1, currentVertexIndex + verticesPerLine); //Triangles count their vertices clockwise
+                    meshData.addTriangle(currentVertexIndex + verticesPerLine + 1, currentVertexIndex, currentVertexIndex + 1);
                 }
 
                 currentVertexIndex++;

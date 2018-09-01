@@ -8,7 +8,14 @@ using UnityEngine;
 public class MapGenerator : MonoBehaviour {
 
     public EditorDrawMode drawMode;
-    public int mapHeight, mapWidth;
+
+    //This is preset because of the Level of Detail system.
+    //That system only works for factors of size-1, and 240 has a lot of factors while staying in Unity's limit of 255^2 vertices per mesh
+    const int mapChunkSize = 241;
+
+    [Tooltip("Allows for dynamic polygon optimization")]
+    [Range(0, 6)]public int meshLevelOfDetail; //Factors of 240: 1, 2, 4, 6, 8, 10, 12. meshLevelOfDetail will be multiplied by two later on
+
     public int mapSeed;
 
     public Biome biome; 
@@ -23,19 +30,16 @@ public class MapGenerator : MonoBehaviour {
 
     void OnValidate()
     {
-        if (mapHeight < 1) mapHeight = 1;
-        if (mapWidth < 1) mapWidth = 1;
-
         GetComponent<mapDisplayer>().texturePane.gameObject.SetActive(drawMode != EditorDrawMode.mesh);
         GetComponent<mapDisplayer>().meshFilter.gameObject.SetActive(drawMode == EditorDrawMode.mesh);
     }
 
     public void generateMap()
     {
-        float[,] map = Noise.GenerateNoiseMap(mapWidth, mapHeight, mapSeed, mapOffet, biome.noiseScale, biome.octaves, biome.persistence, biome.lacunarity);
+        float[,] map = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, mapSeed, mapOffet, biome.noiseScale, biome.octaves, biome.persistence, biome.lacunarity);
 
         if (drawMode == EditorDrawMode.raw) GetComponent<mapDisplayer>().DrawTexture(TextureGenerator.GenerateRawTexture(map));
         else if (drawMode == EditorDrawMode.color) GetComponent<mapDisplayer>().DrawTexture(TextureGenerator.GenerateColorTexture(map, biome.layers));
-        else GetComponent<mapDisplayer>().DrawMesh(MapMeshGenerator.GenerateMesh(map, biome.heightMultiplierCurve), TextureGenerator.GenerateColorTexture(map, biome.layers));
+        else GetComponent<mapDisplayer>().DrawMesh(MapMeshGenerator.GenerateMesh(map, meshLevelOfDetail, biome.heightMultiplierCurve, biome.heightMultiplier), TextureGenerator.GenerateColorTexture(map, biome.layers));
     }
 }

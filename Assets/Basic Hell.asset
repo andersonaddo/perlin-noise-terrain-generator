@@ -9,16 +9,89 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 30fa05495ea4d3c40ba6ac7953e11856, type: 3}
-  m_Name: Hell
+  m_Name: Basic Hell
   m_EditorClassIdentifier: 
-  noiseScale: 0
-  octaves: 0
-  lacunarity: 0
-  persistence: 0
+  noiseScale: 100
+  octaves: 3
+  lacunarity: 6.5
+  persistence: 0.5
   heightMultiplierCurve:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0759467
+      value: -3.6147552
+      inSlope: -1.6746614
+      outSlope: -1.6746614
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.90532744
+    - serializedVersion: 3
+      time: 0.31499064
+      value: -2.558154
+      inSlope: 1.8090937
+      outSlope: 1.8090937
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.32525572
+      value: -1.2825854
+      inSlope: -0.89057165
+      outSlope: -0.89057165
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.57237554
+      value: -0.38628304
+      inSlope: 3.1548572
+      outSlope: 3.1548572
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.62490314
+      value: 2.0520985
+      inSlope: 0.92123115
+      outSlope: 0.92123115
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.439703
+    - serializedVersion: 3
+      time: 0.9008237
+      value: 2.442045
+      inSlope: 1.4132562
+      outSlope: 1.4132562
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  layers: []
+  heightMultiplier: 1.6
+  layers:
+  - name: Abyss
+    heightUpperBound: 0.1
+    color: {r: 0.1792453, g: 0.0008454987, b: 0.014245015, a: 0}
+  - name: Abyss Edge
+    heightUpperBound: 0.15
+    color: {r: 0.36900002, g: 0, b: 0.03208695, a: 0}
+  - name: 'Low lava '
+    heightUpperBound: 0.25
+    color: {r: 0.7735849, g: 0.1629703, b: 0.09122462, a: 0}
+  - name: Mid Lava
+    heightUpperBound: 0.5
+    color: {r: 0.8207547, g: 0.42153555, b: 0, a: 0}
+  - name: Mid Plateau
+    heightUpperBound: 0.72
+    color: {r: 0.6981132, g: 0.12780987, b: 0.016464932, a: 0}
+  - name: Top Plateau
+    heightUpperBound: 1
+    color: {r: 1, g: 0, b: 0, a: 0}

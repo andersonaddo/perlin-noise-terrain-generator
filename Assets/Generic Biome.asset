@@ -19,17 +19,35 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: -0.048957825
-      inSlope: 1.8003258
-      outSlope: 1.8003258
-      tangentMode: 34
+      time: -0.13632303
+      value: -3.8595736
+      inSlope: 4.457799
+      outSlope: 4.457799
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.080479935
+      value: -2.344466
+      inSlope: 11.52964
+      outSlope: 11.52964
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.59098434
-      value: 1.0150065
+      time: 0.27796608
+      value: -1.8339627
+      inSlope: 18.01011
+      outSlope: 18.01011
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.85866535
+      outWeight: 0.33471546
+    - serializedVersion: 3
+      time: 0.7399619
+      value: 0.41476738
       inSlope: 7.5060425
       outSlope: 7.5060425
       tangentMode: 0
@@ -37,10 +55,10 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1.0892493
-      value: 8.126992
-      inSlope: 14.273503
-      outSlope: 14.273503
+      time: 1.0265336
+      value: 8.840954
+      inSlope: 29.403418
+      outSlope: 29.403418
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -48,6 +66,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  heightMultiplier: 1.48
   layers:
   - name: Deep Water
     heightUpperBound: 0.1
@@ -62,10 +81,10 @@ MonoBehaviour:
     heightUpperBound: 0.45
     color: {r: 0.8584906, g: 0.84540224, b: 0, a: 0}
   - name: Low grass
-    heightUpperBound: 0.55
+    heightUpperBound: 0.58
     color: {r: 0.18294775, g: 0.69803923, b: 0.023529407, a: 0}
   - name: ' grass'
-    heightUpperBound: 0.6
+    heightUpperBound: 0.68
     color: {r: 0.123330995, g: 0.4811321, b: 0.011347453, a: 0}
   - name: Rock
     heightUpperBound: 0.9
