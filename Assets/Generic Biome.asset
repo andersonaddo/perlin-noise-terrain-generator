@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30fa05495ea4d3c40ba6ac7953e11856, type: 3}
   m_Name: Generic Biome
   m_EditorClassIdentifier: 
-  noiseScale: 25
+  noiseScale: 75
   octaves: 5
   lacunarity: 2
   persistence: 0.47

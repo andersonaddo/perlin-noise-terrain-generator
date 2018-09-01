@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30fa05495ea4d3c40ba6ac7953e11856, type: 3}
   m_Name: Basic Hell
   m_EditorClassIdentifier: 
-  noiseScale: 100
+  noiseScale: 75
   octaves: 3
   lacunarity: 6.5
   persistence: 0.5
