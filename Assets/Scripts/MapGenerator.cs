@@ -22,7 +22,7 @@ public class MapGenerator : MonoBehaviour {
 
     public Biome biome; 
 
-    [Tooltip("Play with this and you'll see how this works.")]
+    [Tooltip("Play with this and you'll see how this works. This offsets the entire map in runtime too (not live, however)")]
     public Vector2 editorMapOffet;
 
     [Tooltip("Update the Editor map every time you change an inspector value")]
@@ -68,9 +68,9 @@ public class MapGenerator : MonoBehaviour {
         }
     }
 
-    MapData GenerateMapData()
+    MapData GenerateMapData(Vector2 center)
     {
-        float[,] map = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, mapSeed, editorMapOffet, biome.noiseScale, biome.octaves, biome.persistence, biome.lacunarity);
+        float[,] map = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, mapSeed, center + editorMapOffet, biome.noiseScale, biome.octaves, biome.persistence, biome.lacunarity);
 
         Color[] colorMap = new Color[mapChunkSize * mapChunkSize];
         //Going through the colormap array and assigning colors based off the selected biome
@@ -94,19 +94,19 @@ public class MapGenerator : MonoBehaviour {
 
 
     //Called by endlessTerrain Script. Generates MapsData struct on separate thread
-    public void GenerateMapDataAsync(Action<MapData> callback)
+    public void GenerateMapDataAsync(Vector2 center, Action<MapData> callback)
     {
         ThreadStart threadStart = delegate
         {
-            MapDataGenerationThreadLogic(callback);
+            MapDataGenerationThreadLogic(center, callback);
         };
 
         new Thread(threadStart).Start();
     }
 
-    void MapDataGenerationThreadLogic(Action<MapData> callback)
+    void MapDataGenerationThreadLogic(Vector2 center, Action<MapData> callback)
     {
-        MapData data = GenerateMapData();
+        MapData data = GenerateMapData(center);
         lock(mapDataQueue) //To prevent multiple thread from accessing the wueue at the same time. Queue's aren't thread safe!
         {
         mapDataQueue.Enqueue(new GeneratedMapThreadInfo<MapData>(callback, data));
@@ -117,19 +117,19 @@ public class MapGenerator : MonoBehaviour {
 
 
 
-    public void GenerateMeshDataAsync(MapData mapData, Action<MeshData> callback)
+    public void GenerateMeshDataAsync(MapData mapData, Action<MeshData> callback, int levelOfDetail)
     {
         ThreadStart threadStart = delegate
         {
-            MeshDataGenerationThreadLogic(mapData, callback);
+            MeshDataGenerationThreadLogic(mapData, callback, levelOfDetail);
         };
 
         new Thread(threadStart).Start();
     }
 
-    void MeshDataGenerationThreadLogic(MapData mapData, Action<MeshData> callback)
+    void MeshDataGenerationThreadLogic(MapData mapData, Action<MeshData> callback, int levelOfDetail)
     {
-        MeshData meshData = MapMeshGenerator.GenerateMesh(mapData.noiseMap, editorMeshLevelOfDetail ,biome.heightMultiplierCurve, biome.heightMultiplier);
+        MeshData meshData = MapMeshGenerator.GenerateMesh(mapData.noiseMap, levelOfDetail ,biome.heightMultiplierCurve, biome.heightMultiplier);
         lock (mapDataQueue) 
         {
             meshDataQueue.Enqueue(new GeneratedMapThreadInfo<MeshData>(callback, meshData));
@@ -141,7 +141,7 @@ public class MapGenerator : MonoBehaviour {
     //Called by MapGenerator's custom editor script
     public void DrawMapInEditor()
     {
-        MapData mapData = GenerateMapData ();
+        MapData mapData = GenerateMapData (Vector2.zero);
         if (editorDrawMode == EditorDrawMode.raw) GetComponent<mapDisplayer>().DrawTexture(TextureGenerator.GenerateRawTexture(mapData.noiseMap));
         else if (editorDrawMode == EditorDrawMode.color) GetComponent<mapDisplayer>().DrawTexture(TextureGenerator.GenerateColorTexture(mapData.noiseMap, mapData.colorMap));
         else GetComponent<mapDisplayer>().DrawMesh(MapMeshGenerator.GenerateMesh(mapData.noiseMap, editorMeshLevelOfDetail, biome.heightMultiplierCurve, biome.heightMultiplier), TextureGenerator.GenerateColorTexture(mapData.noiseMap, mapData.colorMap));
