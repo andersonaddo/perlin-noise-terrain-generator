@@ -42,6 +42,8 @@ public class MapGenerator : MonoBehaviour {
 
     void Start()
     {
+        Camera.main.backgroundColor = biome.cameraBackgroundColor;
+
         //Removing all my editor planes and meshes
         GetComponent<mapDisplayer>().texturePane.gameObject.SetActive(false);
         GetComponent<mapDisplayer>().meshFilter.gameObject.SetActive(false);
@@ -70,22 +72,14 @@ public class MapGenerator : MonoBehaviour {
 
     MapData GenerateMapData(Vector2 center)
     {
-        float[,] map = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, mapSeed, center + editorMapOffet, biome.noiseScale, biome.octaves, biome.persistence, biome.lacunarity);
+        float[,] map = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, mapSeed, center + editorMapOffet, biome.noiseScale, biome.octaves, biome.persistence, biome.lacunarity, Noise.NormalizeMode.local);
 
         Color[] colorMap = new Color[mapChunkSize * mapChunkSize];
         //Going through the colormap array and assigning colors based off the selected biome
         for (int y = 0; y < mapChunkSize; y++)
             for (int x = 0; x < mapChunkSize; x++)
             {
-                float value = map[x, y];
-                foreach (TerrainLayer layer in biome.layers)
-                {
-                    if (value <= layer.heightUpperBound)
-                    {
-                        colorMap[mapChunkSize * y + x] = layer.color;
-                        break;
-                    }
-                }
+                colorMap[mapChunkSize * y + x] = biome.layers.Evaluate(map[x, y]);
             }
 
         return new MapData(map, colorMap);
@@ -145,6 +139,7 @@ public class MapGenerator : MonoBehaviour {
         if (editorDrawMode == EditorDrawMode.raw) GetComponent<mapDisplayer>().DrawTexture(TextureGenerator.GenerateRawTexture(mapData.noiseMap));
         else if (editorDrawMode == EditorDrawMode.color) GetComponent<mapDisplayer>().DrawTexture(TextureGenerator.GenerateColorTexture(mapData.noiseMap, mapData.colorMap));
         else GetComponent<mapDisplayer>().DrawMesh(MapMeshGenerator.GenerateMesh(mapData.noiseMap, editorMeshLevelOfDetail, biome.heightMultiplierCurve, biome.heightMultiplier), TextureGenerator.GenerateColorTexture(mapData.noiseMap, mapData.colorMap));
+        Camera.main.backgroundColor = biome.cameraBackgroundColor;
     }
 
     /// <summary>

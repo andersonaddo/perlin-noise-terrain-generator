@@ -23,15 +23,16 @@ public class Biome : ScriptableObject {
     public AnimationCurve heightMultiplierCurve;
 
     [Tooltip("Multiplies the output of the heightMultiplierCurve")]
-    public float heightMultiplier; 
+    public float heightMultiplier;
 
-    public TerrainLayer[] layers;
+    public Color cameraBackgroundColor;
+
+    public BiomeColorGradient layers;
 }
 
 [System.Serializable]
 public struct TerrainLayer
 {
-    public string name;
     public float heightUpperBound;
     public Color color;
 }
