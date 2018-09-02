@@ -33,7 +33,7 @@ public class mapGeneratorEditorGUI : Editor {
         if (cachedEditorNeedsRefresh) cachedBiomeEditor = CreateEditor(mapGenerator.biome);
 
         //DrawDefaultInspector draws the editor and returns true if an ispector value has changed
-        if (DrawDefaultInspector() && mapGenerator.autoUpdate) mapGenerator.generateMap();
+        if (DrawDefaultInspector() && mapGenerator.autoUpdate) mapGenerator.DrawMapInEditor();
 
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider); //Adding a horizontal line
 
@@ -42,13 +42,13 @@ public class mapGeneratorEditorGUI : Editor {
         if (showBiomeEditor)
         {
             if (cachedBiomeEditor.DrawDefaultInspector() && mapGenerator.autoUpdate)
-                mapGenerator.generateMap();
+                mapGenerator.DrawMapInEditor();
         }
 
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
 
         //If this button is clicked...
-        if (GUILayout.Button("Generate Map")) mapGenerator.generateMap(); 
+        if (GUILayout.Button("Generate Map")) mapGenerator.DrawMapInEditor(); 
     }
 }

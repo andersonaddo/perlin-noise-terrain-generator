@@ -22,28 +22,11 @@ public static class TextureGenerator
         return texture;
     }
 
-    public static Texture GenerateColorTexture(float[,] noiseMap, TerrainLayer[] layers)
+    public static Texture GenerateColorTexture(float[,] noiseMap, Color[] colorMap)
     {
 
         int width = noiseMap.GetLength(0);
         int height = noiseMap.GetLength(1);
-
-        Color[] colorMap = new Color[height * width];
-
-        //Going through the colormap array and assigning colors based off the selected biome
-        for (int y = 0; y < height; y++)
-            for (int x = 0; x < width; x++)
-            {
-                float value = noiseMap[x, y];
-                foreach (TerrainLayer layer in layers)
-                {
-                    if (value <= layer.heightUpperBound)
-                    {
-                        colorMap[width * y + x] = layer.color;
-                        break;
-                    }
-                }
-            }
 
         Texture2D texture = new Texture2D(width, height);
 

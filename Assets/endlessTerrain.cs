@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class endlessTerrain : MonoBehaviour {
 
+    [HideInInspector]public static MapGenerator generator;
+    public Material meshMaterial;
+
     public const float viewerSightLimit = 500; //How far the viewer can see 
     public Transform viewer, chunkParent;
 
@@ -16,6 +19,7 @@ public class endlessTerrain : MonoBehaviour {
 
     void Start()
     {
+        generator = FindObjectOfType<MapGenerator>();
         chunkSize = MapGenerator.mapChunkSize - 1;
         chunksVisibleInViewerDistance = Mathf.RoundToInt(viewerSightLimit / chunkSize);
     }
@@ -52,7 +56,7 @@ public class endlessTerrain : MonoBehaviour {
                 }
                 else
                 {
-                    terrainChunks.Add(viewableChunkCoord, new TerrainChunk(viewableChunkCoord, chunkSize, chunkParent));
+                    terrainChunks.Add(viewableChunkCoord, new TerrainChunk(viewableChunkCoord, chunkSize, chunkParent, meshMaterial));
                 }
             }
         }
@@ -63,22 +67,39 @@ public class endlessTerrain : MonoBehaviour {
 
     public class TerrainChunk
     {
-        GameObject planeObject;
+        GameObject meshObject;
         Bounds worldBounds;
         Vector3 worldPosition;
+        MeshFilter meshFilter;
+        MeshRenderer meshRenderer;
 
-        public TerrainChunk(Vector2 relativeCoord, int size, Transform parent)
+        public TerrainChunk(Vector2 relativeCoord, int size, Transform parent, Material material)
         {
             worldPosition = new Vector3(relativeCoord.x * size, 0, relativeCoord.y * size);
 
-            planeObject = GameObject.CreatePrimitive(PrimitiveType.Plane);
-            planeObject.transform.position = worldPosition;
-            planeObject.transform.localScale = Vector3.one * size / 10f; //Planes are 10 by 10 by default      
+            meshObject = new GameObject("Terrain Chunk");
+            meshFilter = meshObject.AddComponent<MeshFilter>(); //These two will get their data from some multithreading callbacks soon
+            meshRenderer = meshObject.AddComponent<MeshRenderer>();
+            meshRenderer.material = material;
+
+            meshObject.transform.position = worldPosition;
             setVisible(false); //We'll enable this in the next frame
 
             worldBounds = new Bounds(relativeCoord * size, Vector2.one * size); //Bounds calculations will only take X and Z world axes into consideration, hence the 2D position
 
-            planeObject.transform.SetParent(parent);
+            meshObject.transform.SetParent(parent);
+
+            generator.GenerateMapDataAsync(OnMapDataReceived);
+        }
+
+        void OnMapDataReceived(MapData data)
+        {
+            generator.GenerateMeshDataAsync(data, OnMeshDataReceived);
+        }
+
+        void OnMeshDataReceived(MeshData data)
+        {
+            meshFilter.mesh = data.produceMesh();
         }
 
         //Disables itself if far enough
@@ -91,12 +112,12 @@ public class endlessTerrain : MonoBehaviour {
 
         public void setVisible(bool shouldBeVisible)
         {
-            planeObject.SetActive(shouldBeVisible);
+            meshObject.SetActive(shouldBeVisible);
         }
 
         public bool isVisible()
         {
-            return planeObject.activeSelf;
+            return meshObject.activeSelf;
         }
     }
 

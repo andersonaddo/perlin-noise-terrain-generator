@@ -4,8 +4,9 @@ using UnityEngine;
 
 public static class MapMeshGenerator {
     
-    public static MeshData GenerateMesh(float[,] map, int levelOfDetail, AnimationCurve heightMappingCurve, float heightMultiplier)
+    public static MeshData GenerateMesh(float[,] map, int levelOfDetail, AnimationCurve _heightMappingCurve, float heightMultiplier)
     {
+        AnimationCurve heightMappingCurve = new AnimationCurve(_heightMappingCurve.keys); //We had to do this because for some reason _heightMappingCurve messes up when acessed from multiple threads, 
         int width = map.GetLength(0);
         int height = map.GetLength(1);
 
@@ -39,6 +40,10 @@ public static class MapMeshGenerator {
 
 }
 
+
+/// <summary>
+/// A class to hold mesh infromation for particular noise map
+/// </summary>
 public class MeshData{
     public Vector3[] vertices; //The positions of the vertices
     public Vector2[] uvs; //Contains vectors for the position that each vertix will represent on the mesh's texture. Each vector contains only percentages, so x and y have a max of 1
