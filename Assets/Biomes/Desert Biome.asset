@@ -19,8 +19,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: -0.13632303
-      value: -3.8595736
+      time: -0.13874918
+      value: -1.8198702
       inSlope: 4.457799
       outSlope: 4.457799
       tangentMode: 0
@@ -28,8 +28,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 1
     - serializedVersion: 3
-      time: 0.080479935
-      value: -2.344466
+      time: 0.06589253
+      value: -1.472121
       inSlope: 11.52964
       outSlope: 11.52964
       tangentMode: 0
@@ -37,8 +37,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.27796608
-      value: -1.8339627
+      time: 0.29011208
+      value: -0.55735135
       inSlope: 18.01011
       outSlope: 18.01011
       tangentMode: 0
@@ -46,8 +46,17 @@ MonoBehaviour:
       inWeight: 0.85866535
       outWeight: 0.33471546
     - serializedVersion: 3
+      time: 0.5387364
+      value: -0.26815557
+      inSlope: 4.7700443
+      outSlope: 4.7700443
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
       time: 0.7399619
-      value: 0.41476738
+      value: 0.46795952
       inSlope: 7.5060425
       outSlope: 7.5060425
       tangentMode: 0
@@ -56,7 +65,7 @@ MonoBehaviour:
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 0.96235514
-      value: 0.6995888
+      value: 0.7527809
       inSlope: 1.2807108
       outSlope: 1.2807108
       tangentMode: 34
@@ -66,7 +75,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  heightMultiplier: 0.36
+  heightMultiplier: 1
   cameraBackgroundColor: {r: 0.9528302, g: 0.9528302, b: 0.748, a: 0}
   layers:
     blendMode: 1

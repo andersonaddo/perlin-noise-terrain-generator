@@ -1,0 +1,137 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30fa05495ea4d3c40ba6ac7953e11856, type: 3}
+  m_Name: Mountain Range
+  m_EditorClassIdentifier: 
+  noiseScale: 20.4
+  octaves: 10
+  lacunarity: 3.24
+  persistence: 0.322
+  heightMultiplierCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.0044136047
+      value: 0.16572952
+      inSlope: 4.1300287
+      outSlope: 4.1300287
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.032613724
+      value: 0.31865346
+      inSlope: 1.8747718
+      outSlope: 1.8747718
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.88041145
+    - serializedVersion: 3
+      time: 0.09126389
+      value: 0.20625079
+      inSlope: 2.9024553
+      outSlope: 2.9024553
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.42240432
+    - serializedVersion: 3
+      time: 0.1404015
+      value: 0.49186277
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.19912317
+      value: 0.23515618
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.2524104
+      value: 0.49962777
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.3584939
+      value: 0.54290277
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.4756894
+      value: 0.7115507
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.62769586
+      value: 1.2847476
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.91965383
+      value: 2.7284956
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  heightMultiplier: 8.22
+  cameraBackgroundColor: {r: 0.7089266, g: 0.8396226, b: 0.82603663, a: 0}
+  layers:
+    blendMode: 1
+    randomizeNewLayerColors: 1
+    layers:
+    - heightUpperBound: 0.058080807
+      color: {r: 0.26125884, g: 0.62352943, b: 0.29794452, a: 1}
+    - heightUpperBound: 0.18686868
+      color: {r: 0.7437569, g: 0.82715297, b: 0.8509804, a: 1}
+    - heightUpperBound: 0.2550505
+      color: {r: 0.480964, g: 0.55895066, b: 0.643, a: 1}
+    - heightUpperBound: 0.32575756
+      color: {r: 0.15246381, g: 0.10417338, b: 0.115165316, a: 1}
+    - heightUpperBound: 0.45959595
+      color: {r: 0.20754719, g: 0.12639356, b: 0.036222856, a: 1}
+    - heightUpperBound: 0.6489899
+      color: {r: 0.20784314, g: 0.14961399, b: 0.08583921, a: 1}
+    - heightUpperBound: 0.77020204
+      color: {r: 0.1981132, g: 0.1649652, b: 0.124288, a: 1}
+    - heightUpperBound: 0.9166667
+      color: {r: 0.746262, g: 0.78766304, b: 0.8113208, a: 1}
+    - heightUpperBound: 1
+      color: {r: 1, g: 1, b: 1, a: 1}
