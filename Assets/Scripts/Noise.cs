@@ -7,6 +7,9 @@ using UnityEngine;
 /// </summary>
 public static class Noise {
 
+    public enum NormalizeMode { local, global} //The way noise maps are localized depends on whether we're using the endlessTerrain system or not
+
+
     /// <summary>
     /// Generates a perlin noise map
     /// </summary>
@@ -19,20 +22,26 @@ public static class Noise {
     /// <param name="persistence">The rate of change of reduction influence of each octave. Should be 1 or less</param>
     /// <param name="lacunarity">The rate of change of reduction of gradualness (like, how jagged an octive is) per octve </param>
     /// <returns>A 2D map of values from 0 to 1</returns>
-    public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, Vector2 mapOffset, float scale, int octaves, float persistence, float lacunarity)
+    public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, Vector2 mapOffset, float scale, int octaves, float persistence, float lacunarity, NormalizeMode mode)
      {
         float[,] map = new float[mapWidth, mapHeight];
+
+        float maxPossibleHeight = 0;
+        float tempAmplitude = 1;
+
 
         System.Random random = new System.Random(seed);
         Vector2[] octaveOffets = new Vector2[octaves]; //These offsets are applied to ocatves to add variance
         for (int i = 0; i < octaves; i++)
         {
-            octaveOffets[i] = new Vector2(random.Next(-10000, 10000) + mapOffset.x, random.Next(-10000, 10000) + mapOffset.y);
+            octaveOffets[i] = new Vector2(random.Next(-10000, 10000) + mapOffset.x, random.Next(-10000, 10000) - mapOffset.y);
+            maxPossibleHeight = tempAmplitude;
+            tempAmplitude *= persistence;
         }
 
         if (scale <= 0) scale = 0.0001f;
-        float minNoiseHeight = float.MaxValue;
-        float maxNoiseHeight = float.MinValue;
+        float minLocalNoiseHeight = float.MaxValue;
+        float maxLocalNoiseHeight = float.MinValue;
 
         for (int y = 0; y < mapHeight; y++)
         {
@@ -44,8 +53,8 @@ public static class Noise {
 
                 for (int octave = 0; octave < octaves; octave++)
                 {
-                    float sampleX = (x / scale) * frequency + octaveOffets[octave].x;
-                    float sampleY = (y / scale) * frequency + octaveOffets[octave].y;
+                    float sampleX = ((x + octaveOffets[octave].x) / scale) * frequency ;
+                    float sampleY = ((y + octaveOffets[octave].y)/ scale) * frequency;
 
                     float perlinValue = Mathf.PerlinNoise(sampleX, sampleY);
                     perlinValue = perlinValue * 2 - 1; //Changing this value's range from 0-1 to -1-1 to allow some octaves to reduce noiseHeight
@@ -56,16 +65,19 @@ public static class Noise {
                 }
 
                  map[x, y] = noiseHeight;
-                if (noiseHeight > maxNoiseHeight) maxNoiseHeight = noiseHeight;
-                if (noiseHeight < minNoiseHeight) minNoiseHeight = noiseHeight;
+                if (noiseHeight > maxLocalNoiseHeight) maxLocalNoiseHeight = noiseHeight;
+                if (noiseHeight < minLocalNoiseHeight) minLocalNoiseHeight = noiseHeight;
             }
         }
 
         //Restricting the range back to 0-1
         for (int y = 0; y < mapHeight; y++)
             for (int x = 0; x < mapWidth; x++)           
-                map[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, map[x, y]);
-
+                if (mode == NormalizeMode.local) map[x, y] = Mathf.InverseLerp(minLocalNoiseHeight, maxLocalNoiseHeight , map[x, y]);
+                else
+                {
+                    map[x, y] = Mathf.InverseLerp(minLocalNoiseHeight, maxLocalNoiseHeight, map[x, y]);
+                }
         return map;
      }
 }

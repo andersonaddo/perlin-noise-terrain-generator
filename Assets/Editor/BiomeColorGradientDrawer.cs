@@ -30,6 +30,7 @@ public class BiomeColorGradientDrawer : PropertyDrawer {
             {
                 BiomeColorGradientEditorWindow window = EditorWindow.GetWindow<BiomeColorGradientEditorWindow>();
                 window.setGradient(biomeGradient);
+                window.setBiome((Biome)property.serializedObject.targetObject);
             }
 
         }

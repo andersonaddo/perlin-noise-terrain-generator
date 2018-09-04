@@ -5,9 +5,10 @@ using UnityEngine;
 /// This class represents a custom gradient that evaluated the colors for the texture of the noise maps
 /// </summary>
 [System.Serializable]
-public class BiomeColorGradient {
+public class BiomeColorGradient
+{
 
-    public enum colorBlendMode { linear, discrete}
+    public enum colorBlendMode { linear, discrete }
     public colorBlendMode blendMode;
     public bool randomizeNewLayerColors;
 
@@ -24,12 +25,12 @@ public class BiomeColorGradient {
     /// <summary>
     /// Returns a color based off a noise map value of 0 to 1
     /// </summary>
-	public Color Evaluate (float value)
+	public Color Evaluate(float value)
     {
 
         //Getting the layers to the left and the right of the map value
         TerrainLayer leftLayer = layers[0];
-        TerrainLayer rightLayer = layers[layers.Count -1];
+        TerrainLayer rightLayer = layers[layers.Count - 1];
 
         for (int i = 0; i < layers.Count - 1; i++)
         {
@@ -113,7 +114,7 @@ public class BiomeColorGradient {
     {
         //We can't just change the value directly, the array has be in order
         Color color = layers[index].Color;
-        removeLayer(index);      
+        removeLayer(index);
         return addLayer(color, newBound);
     }
 
@@ -122,13 +123,40 @@ public class BiomeColorGradient {
         layers[index] = new TerrainLayer(layers[index].upperBound, color);
     }
 
+    //Forces a gradient to remove all it's layers. Risky if not called in the right places
+    public void forceClear()
+    {
+        layers.Clear();
+    }
 
-    //These act as keys fo rthe biome gradient
+    //Called by the BiomeColorGradientEditorWindow to keep a stack of undoStates
+    public static BiomeColorGradient Clone(BiomeColorGradient gradient)
+    {
+        BiomeColorGradient clone = new BiomeColorGradient();
+        clone.mimic(gradient);
+        return clone;
+    }
+
+    //Copies all the properties of one gradient onto another
+    public void mimic(BiomeColorGradient gradient)
+    {
+        forceClear();
+        blendMode = gradient.blendMode;
+        randomizeNewLayerColors = gradient.randomizeNewLayerColors;
+
+        for (int i = 0; i < gradient.numberOfLayers; i++)
+        {
+            addLayer(gradient.getlayer(i).Color, gradient.getlayer(i).upperBound);
+        }
+
+    }
+
+    //These act as keys for the biome gradient
     [System.Serializable]
     public struct TerrainLayer
     {
-         [SerializeField] float heightUpperBound; //0 to 1
-         [SerializeField] Color color;
+        [SerializeField] float heightUpperBound; //0 to 1
+        [SerializeField] Color color;
 
         public TerrainLayer(float heightUpperBound, Color color)
         {

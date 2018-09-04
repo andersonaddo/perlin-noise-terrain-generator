@@ -76,28 +76,14 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   heightMultiplier: 2.12
+  cameraBackgroundColor: {r: 0.4528302, g: 0.0021359965, b: 0.16589892, a: 0}
   layers:
-  - name: Deep Corruption
-    heightUpperBound: 0.1
-    color: {r: 0.122641504, g: 0, b: 0.051893536, a: 0}
-  - name: Blood mush 3
-    heightUpperBound: 0.3
-    color: {r: 0.509434, g: 0, b: 0.19607438, a: 0}
-  - name: Blood mush 3
-    heightUpperBound: 0.4
-    color: {r: 0.5660378, g: 0.040049836, b: 0.10283475, a: 0}
-  - name: Blood mush 3
-    heightUpperBound: 0.45
-    color: {r: 0.322, g: 0, b: 0.012053473, a: 0}
-  - name: Rock 1
-    heightUpperBound: 0.58
-    color: {r: 0.18100001, g: 0.053893257, b: 0.0061011226, a: 0}
-  - name: Rock 2
-    heightUpperBound: 0.68
-    color: {r: 0.3019608, g: 0.07438342, b: 0.050980393, a: 0}
-  - name: Sand
-    heightUpperBound: 0.9
-    color: {r: 0.48235294, g: 0.26553655, b: 0.011764695, a: 0}
-  - name: Peak
-    heightUpperBound: 1
-    color: {r: 0, g: 0, b: 0, a: 0}
+    blendMode: 0
+    randomizeNewLayerColors: 1
+    layers:
+    - heightUpperBound: 0
+      color: {r: 1, g: 1, b: 1, a: 1}
+    - heightUpperBound: 0.6818182
+      color: {r: 0.93942237, g: 0.8833935, b: 0.6221112, a: 1}
+    - heightUpperBound: 1
+      color: {r: 0, g: 0, b: 0, a: 1}

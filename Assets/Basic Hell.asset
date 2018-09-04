@@ -76,22 +76,18 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   heightMultiplier: 1.6
+  cameraBackgroundColor: {r: 0, g: 0, b: 0, a: 0}
   layers:
-  - name: Abyss
-    heightUpperBound: 0.1
-    color: {r: 0.1792453, g: 0.0008454987, b: 0.014245015, a: 0}
-  - name: Abyss Edge
-    heightUpperBound: 0.15
-    color: {r: 0.36900002, g: 0, b: 0.03208695, a: 0}
-  - name: 'Low lava '
-    heightUpperBound: 0.25
-    color: {r: 0.7735849, g: 0.1629703, b: 0.09122462, a: 0}
-  - name: Mid Lava
-    heightUpperBound: 0.5
-    color: {r: 0.8207547, g: 0.42153555, b: 0, a: 0}
-  - name: Mid Plateau
-    heightUpperBound: 0.72
-    color: {r: 0.6981132, g: 0.12780987, b: 0.016464932, a: 0}
-  - name: Top Plateau
-    heightUpperBound: 1
-    color: {r: 1, g: 0, b: 0, a: 0}
+    blendMode: 0
+    randomizeNewLayerColors: 0
+    layers:
+    - heightUpperBound: 0
+      color: {r: 1, g: 1, b: 1, a: 1}
+    - heightUpperBound: 0.2777778
+      color: {r: 0.28535354, g: 0.28535354, b: 0.28535354, a: 1}
+    - heightUpperBound: 0.42929292
+      color: {r: 1, g: 0, b: 0, a: 1}
+    - heightUpperBound: 0.69949496
+      color: {r: 0.30973446, g: 0, b: 0, a: 1}
+    - heightUpperBound: 1
+      color: {r: 0, g: 0, b: 0, a: 1}
