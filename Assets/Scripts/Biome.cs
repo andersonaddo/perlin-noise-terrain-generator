@@ -6,6 +6,7 @@ using UnityEngine;
 public class Biome : ScriptableObject {
 
     [Range(0.7f, 100)] public float noiseScale;
+    public float globalNormalizerDivisor;
 
 
     [Tooltip("The number of octaves (ie runs of the perlin calculation) for any map value. Think of them as levels of detail.")]

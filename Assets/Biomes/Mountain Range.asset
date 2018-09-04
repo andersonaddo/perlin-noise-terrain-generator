@@ -11,7 +11,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30fa05495ea4d3c40ba6ac7953e11856, type: 3}
   m_Name: Mountain Range
   m_EditorClassIdentifier: 
-  noiseScale: 23.2
+  noiseScale: 25
+  globalNormalizerDivisor: 1.12
   octaves: 10
   lacunarity: 3.24
   persistence: 0.322

@@ -22,7 +22,7 @@ public static class Noise {
     /// <param name="persistence">The rate of change of reduction influence of each octave. Should be 1 or less</param>
     /// <param name="lacunarity">The rate of change of reduction of gradualness (like, how jagged an octive is) per octve </param>
     /// <returns>A 2D map of values from 0 to 1</returns>
-    public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, Vector2 mapOffset, float scale, int octaves, float persistence, float lacunarity, NormalizeMode mode)
+    public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, Vector2 mapOffset, float scale, int octaves, float persistence, float lacunarity, NormalizeMode mode, float globalDivisor)
      {
         float[,] map = new float[mapWidth, mapHeight];
 
@@ -80,8 +80,7 @@ public static class Noise {
                     //Then we change their range back from -1-1 to 0-1
                     //We should keep in mind though, that there's little chance that a perlin value will get anywhere close to maxPossibleHeight
                     //So we'll divide maxPossibleHeight by a number to reduce the devision effect
-                    //The value we use is just a trial and error value
-                    float normalizedHeight = ((map[x, y] / (maxPossibleHeight / 1.8f)) + 1) / 2;
+                    float normalizedHeight = ((map[x, y] / (maxPossibleHeight / globalDivisor)) + 1) / 2;
                     map[x, y] = Mathf.Clamp01( normalizedHeight); //Clamping in case we a high value stayed out of range after out calculations
                 }
         return map;

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: Corruption Biome
   m_EditorClassIdentifier: 
   noiseScale: 75
+  globalNormalizerDivisor: 1.84
   octaves: 20
   lacunarity: 2.19
   persistence: 0.55

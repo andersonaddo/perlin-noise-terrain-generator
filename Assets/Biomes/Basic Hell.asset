@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: Basic Hell
   m_EditorClassIdentifier: 
   noiseScale: 75
+  globalNormalizerDivisor: 1.52
   octaves: 3
   lacunarity: 6.5
   persistence: 0.5

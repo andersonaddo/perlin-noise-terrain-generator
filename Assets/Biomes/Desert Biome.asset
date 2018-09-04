@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: Desert Biome
   m_EditorClassIdentifier: 
   noiseScale: 40.5
+  globalNormalizerDivisor: 1.62
   octaves: 10
   lacunarity: 2.35
   persistence: 0.55

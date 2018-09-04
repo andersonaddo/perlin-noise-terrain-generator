@@ -74,7 +74,7 @@ public class MapGenerator : MonoBehaviour {
 
     MapData GenerateMapData(Vector2 center, Noise.NormalizeMode normalizeMode)
     {
-        float[,] map = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, mapSeed, center + editorMapOffet, biome.noiseScale, biome.octaves, biome.persistence, biome.lacunarity, normalizeMode);
+        float[,] map = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, mapSeed, center + editorMapOffet, biome.noiseScale, biome.octaves, biome.persistence, biome.lacunarity, normalizeMode, biome.globalNormalizerDivisor);
 
         Color[] colorMap = new Color[mapChunkSize * mapChunkSize];
         //Going through the colormap array and assigning colors based off the selected biome

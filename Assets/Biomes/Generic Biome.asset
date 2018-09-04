@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: Generic Biome
   m_EditorClassIdentifier: 
   noiseScale: 75
+  globalNormalizerDivisor: 2.03
   octaves: 5
   lacunarity: 2
   persistence: 0.47
