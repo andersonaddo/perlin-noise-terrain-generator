@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30fa05495ea4d3c40ba6ac7953e11856, type: 3}
+  m_Name: Corruption Biome
+  m_EditorClassIdentifier: 
+  noiseScale: 75
+  octaves: 20
+  lacunarity: 2.19
+  persistence: 0.55
+  heightMultiplierCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.13632303
+      value: -3.8595736
+      inSlope: 4.457799
+      outSlope: 4.457799
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 1
+    - serializedVersion: 3
+      time: -0.009363815
+      value: 1.3598492
+      inSlope: 11.52964
+      outSlope: 11.52964
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.2933622
+      value: 4.3534765
+      inSlope: 18.01011
+      outSlope: 18.01011
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.85866535
+      outWeight: 0.33471546
+    - serializedVersion: 3
+      time: 0.56943744
+      value: 4.8653727
+      inSlope: 1.6205771
+      outSlope: 1.6205771
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.39237925
+    - serializedVersion: 3
+      time: 0.7528098
+      value: 0.86253655
+      inSlope: 7.5060425
+      outSlope: 7.5060425
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.0265336
+      value: 8.840954
+      inSlope: 29.147696
+      outSlope: 29.147696
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  heightMultiplier: 2.12
+  cameraBackgroundColor: {r: 0.4528302, g: 0.0021359965, b: 0.16589892, a: 0}
+  layers:
+    blendMode: 1
+    randomizeNewLayerColors: 1
+    layers:
+    - heightUpperBound: 0.1
+      color: {r: 0.122641504, g: 0, b: 0.051893536, a: 1}
+    - heightUpperBound: 0.3
+      color: {r: 0.509434, g: 0, b: 0.19607438, a: 1}
+    - heightUpperBound: 0.4
+      color: {r: 0.5660378, g: 0.040049836, b: 0.10283475, a: 1}
+    - heightUpperBound: 0.45
+      color: {r: 0.322, g: 0, b: 0.012053473, a: 1}
+    - heightUpperBound: 0.58
+      color: {r: 0.18100001, g: 0.053893257, b: 0.0061011226, a: 1}
+    - heightUpperBound: 0.68
+      color: {r: 0.3019608, g: 0.07438342, b: 0.050980393, a: 1}
+    - heightUpperBound: 0.9
+      color: {r: 0.48235294, g: 0.26553655, b: 0.011764695, a: 1}
+    - heightUpperBound: 1
+      color: {r: 0, g: 0, b: 0, a: 1}
