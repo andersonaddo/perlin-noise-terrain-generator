@@ -78,16 +78,18 @@ MonoBehaviour:
   heightMultiplier: 1.6
   cameraBackgroundColor: {r: 0, g: 0, b: 0, a: 0}
   layers:
-    blendMode: 0
+    blendMode: 1
     randomizeNewLayerColors: 0
     layers:
-    - heightUpperBound: 0
-      color: {r: 1, g: 1, b: 1, a: 1}
-    - heightUpperBound: 0.2777778
-      color: {r: 0.28535354, g: 0.28535354, b: 0.28535354, a: 1}
+    - heightUpperBound: 0.1
+      color: {r: 0.18, g: 0, b: 0.015, a: 1}
+    - heightUpperBound: 0.15
+      color: {r: 0.37, g: 0, b: 0.032, a: 1}
+    - heightUpperBound: 0.25
+      color: {r: 0.77, g: 0.16, b: 0.09, a: 1}
     - heightUpperBound: 0.42929292
-      color: {r: 1, g: 0, b: 0, a: 1}
-    - heightUpperBound: 0.69949496
-      color: {r: 0.30973446, g: 0, b: 0, a: 1}
+      color: {r: 0.82, g: 0.4, b: 0, a: 1}
+    - heightUpperBound: 0.72
+      color: {r: 0.698, g: 0.127, b: 0.016, a: 1}
     - heightUpperBound: 1
-      color: {r: 0, g: 0, b: 0, a: 1}
+      color: {r: 1, g: 0, b: 0, a: 1}

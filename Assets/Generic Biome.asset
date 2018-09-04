@@ -72,29 +72,19 @@ MonoBehaviour:
     blendMode: 1
     randomizeNewLayerColors: 1
     layers:
-    - heightUpperBound: 0
+    - heightUpperBound: 0.1
+      color: {r: 0, g: 0.41190642, b: 0.509434, a: 1}
+    - heightUpperBound: 0.3
+      color: {r: 0, g: 0.63236916, b: 0.81960785, a: 1}
+    - heightUpperBound: 0.4
+      color: {r: 0.4073451, g: 0.7249255, b: 0.81960785, a: 1}
+    - heightUpperBound: 0.45
+      color: {r: 0.8584906, g: 0.84540224, b: 0, a: 1}
+    - heightUpperBound: 0.58
+      color: {r: 0.18294775, g: 0.69803923, b: 0.023529407, a: 1}
+    - heightUpperBound: 0.68
+      color: {r: 0.123330995, g: 0.4811321, b: 0.011347453, a: 1}
+    - heightUpperBound: 0.9
+      color: {r: 0.48235294, g: 0.26553655, b: 0.011764695, a: 1}
+    - heightUpperBound: 1
       color: {r: 1, g: 1, b: 1, a: 1}
-    - heightUpperBound: 0.18939394
-      color: {r: 0.2049121, g: 0.28184894, b: 0.004771799, a: 1}
-    - heightUpperBound: 0.23260869
-      color: {r: 0.2652174, g: 0.2652174, b: 0.2652174, a: 1}
-    - heightUpperBound: 0.27391306
-      color: {r: 0.726087, g: 0.726087, b: 0.726087, a: 1}
-    - heightUpperBound: 0.2929293
-      color: {r: 0.7393797, g: 0.5928773, b: 0.5165403, a: 1}
-    - heightUpperBound: 0.29347825
-      color: {r: 0.70434785, g: 0.70434785, b: 0.70434785, a: 1}
-    - heightUpperBound: 0.3510101
-      color: {r: 0.587128, g: 0.5948393, b: 0.5875117, a: 1}
-    - heightUpperBound: 0.3661616
-      color: {r: 0.8830284, g: 0.5596921, b: 0.32758805, a: 1}
-    - heightUpperBound: 0.46717173
-      color: {r: 0.24494953, g: 0.24494953, b: 0.24494953, a: 1}
-    - heightUpperBound: 0.47474748
-      color: {r: 0.24894862, g: 0.61568314, b: 0.15833546, a: 1}
-    - heightUpperBound: 0.50757575
-      color: {r: 0.84701836, g: 0.31332394, b: 0.5487639, a: 1}
-    - heightUpperBound: 0.5521739
-      color: {r: 0.8521739, g: 0.8521739, b: 0.8521739, a: 1}
-    - heightUpperBound: 0.65909094
-      color: {r: 0.8763684, g: 0.65179414, b: 0.2829762, a: 1}
