@@ -11,6 +11,8 @@ public class MapGenerator : MonoBehaviour {
 
     public EditorDrawMode editorDrawMode;
 
+    public Noise.NormalizeMode editorNormalizeMode;
+
     //This is preset because of the Level of Detail system.
     //That system only works for factors of size-1, and 240 has a lot of factors while staying in Unity's limit of 255^2 vertices per mesh
     [HideInInspector] public const int mapChunkSize = 241;
@@ -70,9 +72,9 @@ public class MapGenerator : MonoBehaviour {
         }
     }
 
-    MapData GenerateMapData(Vector2 center)
+    MapData GenerateMapData(Vector2 center, Noise.NormalizeMode normalizeMode)
     {
-        float[,] map = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, mapSeed, center + editorMapOffet, biome.noiseScale, biome.octaves, biome.persistence, biome.lacunarity, Noise.NormalizeMode.local);
+        float[,] map = Noise.GenerateNoiseMap(mapChunkSize, mapChunkSize, mapSeed, center + editorMapOffet, biome.noiseScale, biome.octaves, biome.persistence, biome.lacunarity, normalizeMode);
 
         Color[] colorMap = new Color[mapChunkSize * mapChunkSize];
         //Going through the colormap array and assigning colors based off the selected biome
@@ -100,7 +102,7 @@ public class MapGenerator : MonoBehaviour {
 
     void MapDataGenerationThreadLogic(Vector2 center, Action<MapData> callback)
     {
-        MapData data = GenerateMapData(center);
+        MapData data = GenerateMapData(center, Noise.NormalizeMode.global);
         lock(mapDataQueue) //To prevent multiple thread from accessing the wueue at the same time. Queue's aren't thread safe!
         {
         mapDataQueue.Enqueue(new GeneratedMapThreadInfo<MapData>(callback, data));
@@ -135,7 +137,7 @@ public class MapGenerator : MonoBehaviour {
     //Called by MapGenerator's custom editor script
     public void DrawMapInEditor()
     {
-        MapData mapData = GenerateMapData (Vector2.zero);
+        MapData mapData = GenerateMapData (Vector2.zero, editorNormalizeMode);
         if (editorDrawMode == EditorDrawMode.raw) GetComponent<mapDisplayer>().DrawTexture(TextureGenerator.GenerateRawTexture(mapData.noiseMap));
         else if (editorDrawMode == EditorDrawMode.color) GetComponent<mapDisplayer>().DrawTexture(TextureGenerator.GenerateColorTexture(mapData.noiseMap, mapData.colorMap));
         else GetComponent<mapDisplayer>().DrawMesh(MapMeshGenerator.GenerateMesh(mapData.noiseMap, editorMeshLevelOfDetail, biome.heightMultiplierCurve, biome.heightMultiplier), TextureGenerator.GenerateColorTexture(mapData.noiseMap, mapData.colorMap));

@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30fa05495ea4d3c40ba6ac7953e11856, type: 3}
   m_Name: Mountain Range
   m_EditorClassIdentifier: 
-  noiseScale: 20.4
+  noiseScale: 23.2
   octaves: 10
   lacunarity: 3.24
   persistence: 0.322
@@ -20,7 +20,7 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: -0.0044136047
-      value: 0.16572952
+      value: 0.15505219
       inSlope: 4.1300287
       outSlope: 4.1300287
       tangentMode: 34
@@ -29,7 +29,7 @@ MonoBehaviour:
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 0.032613724
-      value: 0.31865346
+      value: 0.30797613
       inSlope: 1.8747718
       outSlope: 1.8747718
       tangentMode: 0
@@ -37,8 +37,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.88041145
     - serializedVersion: 3
-      time: 0.09126389
-      value: 0.20625079
+      time: 0.085145116
+      value: 0.50770724
       inSlope: 2.9024553
       outSlope: 2.9024553
       tangentMode: 0
@@ -46,8 +46,8 @@ MonoBehaviour:
       inWeight: 1
       outWeight: 0.42240432
     - serializedVersion: 3
-      time: 0.1404015
-      value: 0.49186277
+      time: 0.13836445
+      value: 1.2615199
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -55,8 +55,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.19912317
-      value: 0.23515618
+      time: 0.22768763
+      value: 0.70088875
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -64,26 +64,17 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.2524104
-      value: 0.49962777
-      inSlope: 0
-      outSlope: 0
+      time: 0.35116702
+      value: 0.917433
+      inSlope: -1.8765901
+      outSlope: -1.8765901
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0
-      outWeight: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.3584939
-      value: 0.54290277
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.4756894
-      value: 0.7115507
+      time: 0.41560754
+      value: 0.53222543
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -92,7 +83,7 @@ MonoBehaviour:
       outWeight: 0
     - serializedVersion: 3
       time: 0.62769586
-      value: 1.2847476
+      value: 1.2740703
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -100,8 +91,17 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.91965383
-      value: 2.7284956
+      time: 0.8441756
+      value: 2.1009696
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1.0466375
+      value: 2.4722395
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -111,27 +111,29 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  heightMultiplier: 8.22
+  heightMultiplier: 14.4
   cameraBackgroundColor: {r: 0.7089266, g: 0.8396226, b: 0.82603663, a: 0}
   layers:
     blendMode: 1
     randomizeNewLayerColors: 1
     layers:
-    - heightUpperBound: 0.058080807
-      color: {r: 0.26125884, g: 0.62352943, b: 0.29794452, a: 1}
+    - heightUpperBound: 0.11363637
+      color: {r: 0.16135636, g: 0.30551633, b: 0.6981132, a: 1}
     - heightUpperBound: 0.18686868
       color: {r: 0.7437569, g: 0.82715297, b: 0.8509804, a: 1}
-    - heightUpperBound: 0.2550505
-      color: {r: 0.480964, g: 0.55895066, b: 0.643, a: 1}
-    - heightUpperBound: 0.32575756
+    - heightUpperBound: 0.29040405
       color: {r: 0.15246381, g: 0.10417338, b: 0.115165316, a: 1}
-    - heightUpperBound: 0.45959595
-      color: {r: 0.20754719, g: 0.12639356, b: 0.036222856, a: 1}
-    - heightUpperBound: 0.6489899
-      color: {r: 0.20784314, g: 0.14961399, b: 0.08583921, a: 1}
-    - heightUpperBound: 0.77020204
-      color: {r: 0.1981132, g: 0.1649652, b: 0.124288, a: 1}
-    - heightUpperBound: 0.9166667
+    - heightUpperBound: 0.34343433
+      color: {r: 0.6981132, g: 0.6981132, b: 0.6981132, a: 1}
+    - heightUpperBound: 0.47727272
+      color: {r: 0.203, g: 0.19786075, b: 0.19272152, a: 1}
+    - heightUpperBound: 0.5479798
+      color: {r: 0.31132078, g: 0.30350462, b: 0.29516736, a: 1}
+    - heightUpperBound: 0.68434346
+      color: {r: 0.38679248, g: 0.38083246, b: 0.37402102, a: 1}
+    - heightUpperBound: 0.75
+      color: {r: 0.6770118, g: 0.76420486, b: 0.8117647, a: 1}
+    - heightUpperBound: 0.8055556
       color: {r: 0.746262, g: 0.78766304, b: 0.8113208, a: 1}
     - heightUpperBound: 1
       color: {r: 1, g: 1, b: 1, a: 1}

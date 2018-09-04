@@ -26,16 +26,16 @@ public static class Noise {
      {
         float[,] map = new float[mapWidth, mapHeight];
 
-        float maxPossibleHeight = 0;
-        float tempAmplitude = 1;
-
-
         System.Random random = new System.Random(seed);
         Vector2[] octaveOffets = new Vector2[octaves]; //These offsets are applied to ocatves to add variance
+
+        //Calculating the max possible non-clamped value attainable
+        float maxPossibleHeight = 0;
+        float tempAmplitude = 1;
         for (int i = 0; i < octaves; i++)
         {
             octaveOffets[i] = new Vector2(random.Next(-10000, 10000) + mapOffset.x, random.Next(-10000, 10000) - mapOffset.y);
-            maxPossibleHeight = tempAmplitude;
+            maxPossibleHeight += tempAmplitude;
             tempAmplitude *= persistence;
         }
 
@@ -76,7 +76,13 @@ public static class Noise {
                 if (mode == NormalizeMode.local) map[x, y] = Mathf.InverseLerp(minLocalNoiseHeight, maxLocalNoiseHeight , map[x, y]);
                 else
                 {
-                    map[x, y] = Mathf.InverseLerp(minLocalNoiseHeight, maxLocalNoiseHeight, map[x, y]);
+                    //We first have to devide the values by the maximum attainable value
+                    //Then we change their range back from -1-1 to 0-1
+                    //We should keep in mind though, that there's little chance that a perlin value will get anywhere close to maxPossibleHeight
+                    //So we'll divide maxPossibleHeight by a number to reduce the devision effect
+                    //The value we use is just a trial and error value
+                    float normalizedHeight = ((map[x, y] / (maxPossibleHeight / 1.8f)) + 1) / 2;
+                    map[x, y] = Mathf.Clamp01( normalizedHeight); //Clamping in case we a high value stayed out of range after out calculations
                 }
         return map;
      }

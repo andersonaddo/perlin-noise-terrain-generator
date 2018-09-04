@@ -6,6 +6,8 @@ public class endlessTerrain : MonoBehaviour {
 
     public levelOfDetailLimit[] LODLimits;
     public static float viewerSightLimit; //How far the viewer can see. Automtically set to the last limit of the LODLimits array
+    public float meshChunkScale = 1;
+    public static float _meshChunkSclale;
 
     public Transform viewer, chunkParent;
     public static Vector2 viewerPosition;
@@ -27,6 +29,7 @@ public class endlessTerrain : MonoBehaviour {
     void Start()
     {
         generator = FindObjectOfType<MapGenerator>();
+        _meshChunkSclale = meshChunkScale;
 
         viewerSightLimit = LODLimits[LODLimits.Length - 1].distanceUpperBound;
         chunkSize = MapGenerator.mapChunkSize - 1;
@@ -40,7 +43,7 @@ public class endlessTerrain : MonoBehaviour {
 
     void Update()
     {
-        viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
+        viewerPosition = new Vector2(viewer.position.x, viewer.position.z) / _meshChunkSclale;
         if ((oldViewerPosition - viewerPosition).sqrMagnitude > distanceThresholdSquared) //Faster than vecotor3.distance()
         {
             oldViewerPosition = viewerPosition;
@@ -109,7 +112,8 @@ public class endlessTerrain : MonoBehaviour {
             meshRenderer = meshObject.AddComponent<MeshRenderer>();
             meshRenderer.material = material;
 
-            meshObject.transform.position = worldPosition;
+            meshObject.transform.position = worldPosition * _meshChunkSclale;
+            meshObject.transform.localScale = Vector3.one * _meshChunkSclale;
             setVisible(false); //We'll enable this in the next frame
 
             worldBounds = new Bounds(relativeCoord * size, Vector2.one * size); //Bounds calculations will only take X and Z world axes into consideration, hence the 2D position
