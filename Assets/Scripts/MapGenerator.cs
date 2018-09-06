@@ -44,8 +44,6 @@ public class MapGenerator : MonoBehaviour {
 
     void Start()
     {
-        Camera.main.backgroundColor = biome.cameraBackgroundColor;
-
         //Removing all my editor planes and meshes
         GetComponent<mapDisplayer>().texturePane.gameObject.SetActive(false);
         GetComponent<mapDisplayer>().meshFilter.gameObject.SetActive(false);
@@ -137,11 +135,12 @@ public class MapGenerator : MonoBehaviour {
     //Called by MapGenerator's custom editor script
     public void DrawMapInEditor()
     {
+        if (!biome) return;
+        GetComponent<biomeAmbienceManager>().setAmbience();
         MapData mapData = GenerateMapData (Vector2.zero, editorNormalizeMode);
         if (editorDrawMode == EditorDrawMode.raw) GetComponent<mapDisplayer>().DrawTexture(TextureGenerator.GenerateRawTexture(mapData.noiseMap));
         else if (editorDrawMode == EditorDrawMode.color) GetComponent<mapDisplayer>().DrawTexture(TextureGenerator.GenerateColorTexture(mapData.noiseMap, mapData.colorMap));
         else GetComponent<mapDisplayer>().DrawMesh(MapMeshGenerator.GenerateMesh(mapData.noiseMap, editorMeshLevelOfDetail, biome.heightMultiplierCurve, biome.heightMultiplier), TextureGenerator.GenerateColorTexture(mapData.noiseMap, mapData.colorMap));
-        Camera.main.backgroundColor = biome.cameraBackgroundColor;
     }
 
     /// <summary>

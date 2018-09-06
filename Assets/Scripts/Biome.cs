@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PostProcessing;
 
 [CreateAssetMenu(fileName = "New Biome", menuName = "Perlin Maps/Biome", order = 1)]
 public class Biome : ScriptableObject {
@@ -26,7 +27,7 @@ public class Biome : ScriptableObject {
     [Tooltip("Multiplies the output of the heightMultiplierCurve")]
     public float heightMultiplier;
 
-    public Color cameraBackgroundColor;
+    public biomeAmbienceData ambienceData;
 
     public BiomeColorGradient layers;
 }
@@ -36,4 +37,16 @@ public struct TerrainLayer
 {
     public float heightUpperBound;
     public Color color;
+}
+
+/// <summary>
+/// Holds all the secondary aethetic data for a biome (like post processing)
+/// </summary>
+[System.Serializable]
+public class biomeAmbienceData
+{
+    public Color cameraBackgroundColor;
+    public PostProcessingProfile postProcessingProfile;
+    public Color directionalLightColor;
+    public float directionalLightIntensity;
 }

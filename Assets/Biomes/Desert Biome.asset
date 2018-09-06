@@ -77,7 +77,12 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   heightMultiplier: 1
-  cameraBackgroundColor: {r: 0.9528302, g: 0.9528302, b: 0.748, a: 0}
+  ambienceData:
+    cameraBackgroundColor: {r: 0.9433962, g: 0.81337327, b: 0.56514776, a: 1}
+    postProcessingProfile: {fileID: 11400000, guid: da1b3e6b5214bf1498a23b1a45c6b0b9,
+      type: 2}
+    directionalLightColor: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+    directionalLightIntensity: 0.82
   layers:
     blendMode: 1
     randomizeNewLayerColors: 0

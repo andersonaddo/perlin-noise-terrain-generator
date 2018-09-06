@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: Corruption Biome
   m_EditorClassIdentifier: 
   noiseScale: 75
-  globalNormalizerDivisor: 1.84
+  globalNormalizerDivisor: 2.44
   octaves: 20
   lacunarity: 2.19
   persistence: 0.55
@@ -76,10 +76,15 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  heightMultiplier: 2.12
-  cameraBackgroundColor: {r: 0.4528302, g: 0.0021359965, b: 0.16589892, a: 0}
+  heightMultiplier: 2
+  ambienceData:
+    cameraBackgroundColor: {r: 0, g: 0, b: 0, a: 0}
+    postProcessingProfile: {fileID: 11400000, guid: 2149fd2433bf63a4cab11b785bd90800,
+      type: 2}
+    directionalLightColor: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+    directionalLightIntensity: 0.8
   layers:
-    blendMode: 1
+    blendMode: 0
     randomizeNewLayerColors: 1
     layers:
     - heightUpperBound: 0.1
