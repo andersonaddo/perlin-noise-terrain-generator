@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Uses object pooling for the infinite effect
 public class endlessTerrain : MonoBehaviour {
 
     public levelOfDetailLimit[] LODLimits;
     public static float viewerSightLimit; //How far the viewer can see. Automtically set to the last limit of the LODLimits array
     public float meshChunkScale = 1;
-    public static float _meshChunkSclale;
+    public static float _meshChunkScale;
 
-    public Transform viewer, chunkParent;
+    public Transform viewer;
     public static Vector2 viewerPosition;
     Vector2 oldViewerPosition;
 
@@ -29,7 +30,7 @@ public class endlessTerrain : MonoBehaviour {
     void Start()
     {
         generator = FindObjectOfType<MapGenerator>();
-        _meshChunkSclale = meshChunkScale;
+        _meshChunkScale = meshChunkScale;
 
         viewerSightLimit = LODLimits[LODLimits.Length - 1].distanceUpperBound;
         chunkSize = MapGenerator.mapChunkSize - 1;
@@ -38,13 +39,16 @@ public class endlessTerrain : MonoBehaviour {
         distanceThresholdSquared = moveDistanceUpdateThreshold * moveDistanceUpdateThreshold;
         viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
         oldViewerPosition = viewerPosition;
+
+        GetComponent<TerrainChunkPooler>().setUp(50); //*1.5 so that there's a bit of excess
+
         UpdateVisibleChunks();
     }
 
     void Update()
     {
-        viewerPosition = new Vector2(viewer.position.x, viewer.position.z) / _meshChunkSclale;
-        if ((oldViewerPosition - viewerPosition).sqrMagnitude > distanceThresholdSquared) //Faster than vecotor3.distance()
+        viewerPosition = new Vector2(viewer.position.x, viewer.position.z) / _meshChunkScale;
+        if ((oldViewerPosition - viewerPosition).sqrMagnitude > distanceThresholdSquared) //Faster than vecotor3.distance() since we don't have to constantly get the square root
         {
             oldViewerPosition = viewerPosition;
             UpdateVisibleChunks();
@@ -59,7 +63,7 @@ public class endlessTerrain : MonoBehaviour {
         int currentChunkX = Mathf.RoundToInt(viewerPosition.x / chunkSize);
         int currentChunkY = Mathf.RoundToInt(viewerPosition.y / chunkSize);
 
-        foreach (TerrainChunk terrain in terrainChunksVisibleLastFrame) terrain.setVisible(false);
+        foreach (TerrainChunk terrain in terrainChunksVisibleLastFrame) terrain.disableIfNeeded();
         terrainChunksVisibleLastFrame.Clear();
 
         //Looking at surrounding chunks that should be visible to the player
@@ -76,7 +80,7 @@ public class endlessTerrain : MonoBehaviour {
                 }
                 else
                 {
-                    terrainChunks.Add(viewableChunkCoord, new TerrainChunk(viewableChunkCoord, chunkSize, LODLimits, chunkParent, meshMaterial));
+                    terrainChunks.Add(viewableChunkCoord, new TerrainChunk(viewableChunkCoord, chunkSize, LODLimits, meshMaterial));
                 }
             }
         }
@@ -87,11 +91,15 @@ public class endlessTerrain : MonoBehaviour {
 
     public class TerrainChunk
     {
-        GameObject meshObject;
+        bool isVisible = true;
+
         Bounds worldBounds;
         Vector3 worldPosition;
-        MeshFilter meshFilter;
-        MeshRenderer meshRenderer;
+
+        Texture recievedTexture;
+        Material material;
+
+        TerrainChunkObject assignedTCObject; //Will be assigned to when we get a mesh
 
         MapData mapData;
         bool hasRecievedMapData;
@@ -101,23 +109,16 @@ public class endlessTerrain : MonoBehaviour {
 
         int currentLevelOfDetailIndex = -1;
 
-        public TerrainChunk(Vector2 relativeCoord, int size, levelOfDetailLimit[] LODLimits, Transform parent, Material material)
+        public TerrainChunk(Vector2 relativeCoord, int size, levelOfDetailLimit[] LODLimits, Material material)
         {
             this.LODLimits = LODLimits;
 
             worldPosition = new Vector3(relativeCoord.x * size, 0, relativeCoord.y * size);
 
-            meshObject = new GameObject("Terrain Chunk");
-            meshFilter = meshObject.AddComponent<MeshFilter>(); //These two will get their data from some multithreading callbacks soon
-            meshRenderer = meshObject.AddComponent<MeshRenderer>();
-            meshRenderer.material = material;
-
-            meshObject.transform.position = worldPosition * _meshChunkSclale;
-            meshObject.transform.localScale = Vector3.one * _meshChunkSclale;
-            setVisible(false); //We'll enable this in the next frame
+            this.material = material;
+            setVisible(false); //We'll enable this when we get the mesh and the terrain chunk still needs to be rendered
 
             worldBounds = new Bounds(relativeCoord * size, Vector2.one * size); //Bounds calculations will only take X and Z world axes into consideration, hence the 2D position
-            meshObject.transform.SetParent(parent);
 
             levelOfDetailMeshes = new LODMesh[LODLimits.Length];
             for (int i = 0; i < levelOfDetailMeshes.Length; i++)
@@ -133,10 +134,22 @@ public class endlessTerrain : MonoBehaviour {
             this.mapData = data;
             hasRecievedMapData = true;
 
-            Texture mapTexture = TextureGenerator.GenerateColorTexture(mapData.noiseMap, mapData.colorMap);
-            meshRenderer.material.mainTexture = mapTexture;
+            recievedTexture = TextureGenerator.GenerateColorTexture(mapData.noiseMap, mapData.colorMap);
 
             UpdateVisibilityOrLOD(); //TO start rendering our chunk now
+        }
+
+
+        public void disableIfNeeded()
+        {
+            float viewerDistanceFromNearestEdge = Mathf.Sqrt(worldBounds.SqrDistance(viewerPosition));
+            bool shouldBeVisible = viewerDistanceFromNearestEdge <= viewerSightLimit;
+            setVisible(shouldBeVisible);
+            if (!shouldBeVisible)
+            {
+                assignedTCObject.release();
+                assignedTCObject = null;
+            }
         }
 
         //Disables itself if far enough
@@ -146,11 +159,23 @@ public class endlessTerrain : MonoBehaviour {
             bool shouldBeVisible = viewerDistanceFromNearestEdge <= viewerSightLimit;
             setVisible(shouldBeVisible);
 
+            if (shouldBeVisible && assignedTCObject == null)
+            {
+                assignedTCObject = FindObjectOfType<TerrainChunkPooler>().supplyTCObject();
+                setUpTCObject();
+            }
+            else if (!shouldBeVisible && assignedTCObject != null)
+            {
+                assignedTCObject.release();
+                assignedTCObject = null;
+            }
+
             //Going through all the LOD limits (but the last one, because the player cannot see past that one, and choosing the corrent LOD
             if (shouldBeVisible && hasRecievedMapData)
             {
                 int lodIndex = 0;
 
+                //Finding the correct LOD...
                 for (int i = 0; i < LODLimits.Length - 1; i++)
                 {
                     if (viewerDistanceFromNearestEdge > LODLimits[i].distanceUpperBound)
@@ -164,7 +189,7 @@ public class endlessTerrain : MonoBehaviour {
                     if (lodMesh.hasRecievedMesh)
                     {
                         currentLevelOfDetailIndex = lodIndex;
-                        meshFilter.mesh = lodMesh.mesh;
+                        assignedTCObject.setMesh(lodMesh.mesh);
                     }
                     else if (!lodMesh.hasRequestedMesh) lodMesh.RequestMesh(mapData); 
                     //Otherwise we'll just have to wait and see if data has been recieved yet
@@ -174,14 +199,17 @@ public class endlessTerrain : MonoBehaviour {
             }
         }
 
-        public void setVisible(bool shouldBeVisible)
+        public void setUpTCObject()
         {
-            meshObject.SetActive(shouldBeVisible);
+            assignedTCObject.setMaterial(material);
+            assignedTCObject.setTexture(recievedTexture);
+            assignedTCObject.transform.position = worldPosition * _meshChunkScale;
+            assignedTCObject.transform.localScale = Vector3.one * _meshChunkScale;
         }
 
-        public bool isVisible()
+        public void setVisible(bool value)
         {
-            return meshObject.activeSelf;
+            isVisible = value;
         }
     }
 
