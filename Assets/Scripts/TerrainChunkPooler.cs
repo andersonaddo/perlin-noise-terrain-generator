@@ -15,7 +15,7 @@ public class TerrainChunkPooler : MonoBehaviour {
             GameObject chunk = new GameObject();
             chunk.SetActive(false);
             terrainChunks.Add(chunk.AddComponent<TerrainChunkObject>());
-            chunk.name = "TerrainChunk";
+            chunk.name = "Terrain Chunk" + i;
             chunk.transform.SetParent(chunkParent);
         }
     }
@@ -30,6 +30,8 @@ public class TerrainChunkPooler : MonoBehaviour {
                 return t;
             }
         }
+
+        Debug.LogError("null returned from supplyTCObject");
         return null;
     }
 }

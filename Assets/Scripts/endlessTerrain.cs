@@ -40,7 +40,8 @@ public class endlessTerrain : MonoBehaviour {
         viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
         oldViewerPosition = viewerPosition;
 
-        GetComponent<TerrainChunkPooler>().setUp(50); //*1.5 so that there's a bit of excess
+        int chunksActiveAroundViewer = (int) Mathf.Pow(((chunksVisibleInViewerDistance * 2) + 1), 2);
+        GetComponent<TerrainChunkPooler>().setUp(Mathf.RoundToInt(chunksActiveAroundViewer * 1.2f)); //* 1.5f to create surplus to prevent any edge case scenarios
 
         UpdateVisibleChunks();
     }
@@ -63,7 +64,18 @@ public class endlessTerrain : MonoBehaviour {
         int currentChunkX = Mathf.RoundToInt(viewerPosition.x / chunkSize);
         int currentChunkY = Mathf.RoundToInt(viewerPosition.y / chunkSize);
 
-        foreach (TerrainChunk terrain in terrainChunksVisibleLastFrame) terrain.disableIfNeeded();
+        //Removing chunks not visisble to the player...
+
+        Bounds playerVisibilityBounds = new Bounds(new Vector2(currentChunkX, currentChunkY), Vector2.one * (chunksVisibleInViewerDistance * 2 + 1));
+
+        foreach (TerrainChunk chunk in terrainChunksVisibleLastFrame)
+        {       
+            if (!playerVisibilityBounds.Contains(chunk.relativeCoord))
+            {
+                chunk.disableTCObject();
+            }
+        }
+
         terrainChunksVisibleLastFrame.Clear();
 
         //Looking at surrounding chunks that should be visible to the player
@@ -96,6 +108,8 @@ public class endlessTerrain : MonoBehaviour {
         Bounds worldBounds;
         Vector3 worldPosition;
 
+        public readonly Vector2 relativeCoord;
+
         Texture recievedTexture;
         Material material;
 
@@ -115,8 +129,9 @@ public class endlessTerrain : MonoBehaviour {
 
             worldPosition = new Vector3(relativeCoord.x * size, 0, relativeCoord.y * size);
 
+            this.relativeCoord = relativeCoord;
+
             this.material = material;
-            setVisible(false); //We'll enable this when we get the mesh and the terrain chunk still needs to be rendered
 
             worldBounds = new Bounds(relativeCoord * size, Vector2.one * size); //Bounds calculations will only take X and Z world axes into consideration, hence the 2D position
 
@@ -139,32 +154,14 @@ public class endlessTerrain : MonoBehaviour {
             UpdateVisibilityOrLOD(); //TO start rendering our chunk now
         }
 
-
-        public void disableIfNeeded()
-        {
-            float viewerDistanceFromNearestEdge = Mathf.Sqrt(worldBounds.SqrDistance(viewerPosition));
-            bool shouldBeVisible = viewerDistanceFromNearestEdge <= viewerSightLimit;
-            setVisible(shouldBeVisible);
-            if (!shouldBeVisible)
-            {
-                assignedTCObject.release();
-                assignedTCObject = null;
-            }
-        }
-
         //Disables itself if far enough
         public void UpdateVisibilityOrLOD()
         {
             float viewerDistanceFromNearestEdge = Mathf.Sqrt(worldBounds.SqrDistance(viewerPosition));
             bool shouldBeVisible = viewerDistanceFromNearestEdge <= viewerSightLimit;
-            setVisible(shouldBeVisible);
 
-            if (shouldBeVisible && assignedTCObject == null)
-            {
-                assignedTCObject = FindObjectOfType<TerrainChunkPooler>().supplyTCObject();
-                setUpTCObject();
-            }
-            else if (!shouldBeVisible && assignedTCObject != null)
+
+            if (!shouldBeVisible && assignedTCObject != null) //Needed because this method can also be called from callbacks
             {
                 assignedTCObject.release();
                 assignedTCObject = null;
@@ -183,6 +180,13 @@ public class endlessTerrain : MonoBehaviour {
                     else break;
                 }
 
+                
+                if (shouldBeVisible && assignedTCObject == null)
+                {
+                    assignedTCObject = FindObjectOfType<TerrainChunkPooler>().supplyTCObject();
+                    setUpTCObject();
+                }
+
                 if (currentLevelOfDetailIndex != lodIndex)
                 {
                     LODMesh lodMesh = levelOfDetailMeshes[lodIndex];
@@ -195,7 +199,7 @@ public class endlessTerrain : MonoBehaviour {
                     //Otherwise we'll just have to wait and see if data has been recieved yet
                 }
 
-                terrainChunksVisibleLastFrame.Add(this);
+                if (shouldBeVisible) terrainChunksVisibleLastFrame.Add(this);
             }
         }
 
@@ -207,9 +211,11 @@ public class endlessTerrain : MonoBehaviour {
             assignedTCObject.transform.localScale = Vector3.one * _meshChunkScale;
         }
 
-        public void setVisible(bool value)
+        public void disableTCObject()
         {
-            isVisible = value;
+            if (assignedTCObject == null) return;
+            assignedTCObject.release();
+            assignedTCObject = null;
         }
     }
 
