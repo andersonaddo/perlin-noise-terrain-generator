@@ -72,7 +72,7 @@ public class endlessTerrain : MonoBehaviour {
         {       
             if (!playerVisibilityBounds.Contains(chunk.relativeCoord))
             {
-                chunk.disableTCObject();
+                chunk.disableChunkGO();
             }
         }
 
@@ -103,36 +103,33 @@ public class endlessTerrain : MonoBehaviour {
 
     public class TerrainChunk
     {
-        bool isVisible = true;
+        bool isVisible = true; //Currently not used atm
 
+        public readonly Vector2 relativeCoord; //Coordinates realative to other chunks
         Bounds worldBounds;
         Vector3 worldPosition;
 
-        public readonly Vector2 relativeCoord;
-
-        Texture recievedTexture;
         Material material;
-
-        TerrainChunkObject assignedTCObject; //Will be assigned to when we get a mesh
+        Texture recievedTexture;
 
         MapData mapData;
         bool hasRecievedMapData;
 
+        TerrainChunkObject assignedChunkGO; //Will be assigned to when we get a mesh
+
         levelOfDetailLimit[] LODLimits;
         LODMesh[] levelOfDetailMeshes;
-
         int currentLevelOfDetailIndex = -1;
+
+        bool hasGeneratedArtifacts;
 
         public TerrainChunk(Vector2 relativeCoord, int size, levelOfDetailLimit[] LODLimits, Material material)
         {
             this.LODLimits = LODLimits;
-
-            worldPosition = new Vector3(relativeCoord.x * size, 0, relativeCoord.y * size);
-
             this.relativeCoord = relativeCoord;
-
             this.material = material;
 
+            worldPosition = new Vector3(relativeCoord.x * size, 0, relativeCoord.y * size);
             worldBounds = new Bounds(relativeCoord * size, Vector2.one * size); //Bounds calculations will only take X and Z world axes into consideration, hence the 2D position
 
             levelOfDetailMeshes = new LODMesh[LODLimits.Length];
@@ -161,10 +158,11 @@ public class endlessTerrain : MonoBehaviour {
             bool shouldBeVisible = viewerDistanceFromNearestEdge <= viewerSightLimit;
 
 
-            if (!shouldBeVisible && assignedTCObject != null) //Needed because this method can also be called from callbacks
+            if (!shouldBeVisible && assignedChunkGO != null) //Needed because this method can also be called from callbacks
             {
-                assignedTCObject.release();
-                assignedTCObject = null;
+                assignedChunkGO.release();
+                disableAtifacts();
+                assignedChunkGO = null;
             }
 
             //Going through all the LOD limits (but the last one, because the player cannot see past that one, and choosing the corrent LOD
@@ -180,48 +178,68 @@ public class endlessTerrain : MonoBehaviour {
                     else break;
                 }
 
-                
-                if (shouldBeVisible && assignedTCObject == null)
-                {
-                    assignedTCObject = FindObjectOfType<TerrainChunkPooler>().supplyTCObject();
-                    setUpTCObject();
-                }
-
                 if (currentLevelOfDetailIndex != lodIndex)
                 {
                     LODMesh lodMesh = levelOfDetailMeshes[lodIndex];
                     if (lodMesh.hasRecievedMesh)
                     {
+                        //Now that there's a mesh ready, we can request for a gameobject to represent us
+                        if (assignedChunkGO == null)
+                        {
+                            assignedChunkGO = FindObjectOfType<TerrainChunkPooler>().supplyTCObject();
+                            setUpChunkGO();
+                        }
+
+                        //Setting the mesh
                         currentLevelOfDetailIndex = lodIndex;
-                        assignedTCObject.setMesh(lodMesh.mesh);
+                        assignedChunkGO.setMesh(lodMesh.mesh);
+                        enableArtifacts();
                     }
-                    else if (!lodMesh.hasRequestedMesh) lodMesh.RequestMesh(mapData); 
-                    //Otherwise we'll just have to wait and see if data has been recieved yet
+                    else if (!lodMesh.hasRequestedMesh) lodMesh.RequestMesh(mapData);
+                    //Otherwise we'll just have to wait and see if data has been recieved yet. 
+                    //UpdateVisibilityOrLOD will be called from a callback when a mesh is recieved.
                 }
 
                 if (shouldBeVisible) terrainChunksVisibleLastFrame.Add(this);
             }
         }
 
-        public void setUpTCObject()
+        public void setUpChunkGO()
         {
-            assignedTCObject.setMaterial(material);
-            assignedTCObject.setTexture(recievedTexture);
-            assignedTCObject.transform.position = worldPosition * _meshChunkScale;
-            assignedTCObject.transform.localScale = Vector3.one * _meshChunkScale;
+            assignedChunkGO.setMaterial(material);
+            assignedChunkGO.setTexture(recievedTexture);
+            assignedChunkGO.transform.position = worldPosition * _meshChunkScale;
+            assignedChunkGO.transform.localScale = Vector3.one * _meshChunkScale;
         }
 
-        public void disableTCObject()
+        public void disableChunkGO()
         {
-            if (assignedTCObject == null) return;
-            assignedTCObject.release();
-            assignedTCObject = null;
+            if (assignedChunkGO == null) return;
+            assignedChunkGO.release();
+            disableAtifacts();
+            assignedChunkGO = null;
+        }
+
+        //Called inside of enableArtifacts
+        public void generateArtifacts()
+        {
+
+        }
+
+        public void enableArtifacts()
+        {
+
+        }
+
+        public void disableAtifacts()
+        {
+
         }
     }
 
 
     /// <summary>
-    /// Used by instances of TerrainChunk to hold different meshes for different levels of detail
+    /// Used by instances of TerrainChunk class to hold different meshes for different levels of detail
     /// </summary>
     class LODMesh
     {
@@ -252,7 +270,10 @@ public class endlessTerrain : MonoBehaviour {
         }
     }
 
-    //A list of these will be used to determine the level of detail of meshes based off their distance from the viewer
+    /// <summary>
+    /// A list of these will be used to determine the level of detail of meshes based off their distance from the viewer.
+    /// Set in the inspector
+    /// </summary>
     [System.Serializable]
     public struct levelOfDetailLimit
     {

@@ -15,7 +15,7 @@ public class TerrainChunkPooler : MonoBehaviour {
             GameObject chunk = new GameObject();
             chunk.SetActive(false);
             terrainChunks.Add(chunk.AddComponent<TerrainChunkObject>());
-            chunk.name = "Terrain Chunk" + i;
+            chunk.name = "Terrain Chunk GO" + i;
             chunk.transform.SetParent(chunkParent);
         }
     }
