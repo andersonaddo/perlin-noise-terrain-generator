@@ -101,3 +101,9 @@ MonoBehaviour:
       color: {r: 0.9339623, g: 0.77791816, b: 0.19824673, a: 1}
     - heightUpperBound: 1
       color: {r: 1, g: 1, b: 1, a: 1}
+  artifactChancePerVertix: 0.022
+  artifacts:
+  - {fileID: 11400000, guid: 3da0e1d4bae785345b3bfe4db39262e0, type: 2}
+  - {fileID: 11400000, guid: 2e9ff85a3fe038447a4d887eb8e998bf, type: 2}
+  - {fileID: 11400000, guid: 648a2956bcba7f94f989d4b326420c1f, type: 2}
+  - {fileID: 11400000, guid: 799de810325ce9f4cabe66646c8b7f8f, type: 2}
