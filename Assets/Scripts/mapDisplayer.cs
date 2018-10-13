@@ -17,7 +17,7 @@ public class mapDisplayer : MonoBehaviour {
         //We're using sharedMaterial instead of material because material is only usuable in run-time
         //But it would be nice to be able to see this rendering in the editor too
         texturePane.sharedMaterial.mainTexture = texture;
-        texturePane.transform.localScale = new Vector3(texture.width, 1, texture.height); //Stretching to match map dimensions
+        texturePane.transform.localScale = new Vector3(texture.width/10, 1, texture.height/10); //Stretching to match map dimensions
     }
 
 
