@@ -30,6 +30,11 @@ public class Biome : ScriptableObject {
     public biomeAmbienceData ambienceData;
 
     public BiomeColorGradient layers;
+
+    [Tooltip("What is the chance that an artifact will be placed on any vertix on the mesh?")]
+    [Range(0, 1)] public float artifactChancePerVertix;
+
+    public List<BiomeArtifact> artifacts;
 }
 
 [System.Serializable]

@@ -27,6 +27,7 @@ public class endlessTerrain : MonoBehaviour {
     Dictionary<Vector2, TerrainChunk> terrainChunks = new Dictionary<Vector2, TerrainChunk>();
     static List<TerrainChunk> terrainChunksVisibleLastFrame = new List<TerrainChunk>();
 
+
     void Start()
     {
         generator = FindObjectOfType<MapGenerator>();
@@ -92,7 +93,7 @@ public class endlessTerrain : MonoBehaviour {
                 }
                 else
                 {
-                    terrainChunks.Add(viewableChunkCoord, new TerrainChunk(viewableChunkCoord, chunkSize, LODLimits, meshMaterial));
+                    terrainChunks.Add(viewableChunkCoord, new TerrainChunk(viewableChunkCoord, chunkSize, LODLimits, meshMaterial, GetComponent<MapGenerator>().biome));
                 }
             }
         }
@@ -107,8 +108,9 @@ public class endlessTerrain : MonoBehaviour {
 
         public readonly Vector2 relativeCoord; //Coordinates realative to other chunks
         Bounds worldBounds;
-        Vector3 worldPosition;
+        Vector3 scaledWorldPosition;
 
+        Biome biome;
         Material material;
         Texture recievedTexture;
 
@@ -116,20 +118,21 @@ public class endlessTerrain : MonoBehaviour {
         bool hasRecievedMapData;
 
         TerrainChunkObject assignedChunkGO; //Will be assigned to when we get a mesh
+        TCArtifactManager artifactManager;
 
         levelOfDetailLimit[] LODLimits;
         LODMesh[] levelOfDetailMeshes;
         int currentLevelOfDetailIndex = -1;
 
-        bool hasGeneratedArtifacts;
-
-        public TerrainChunk(Vector2 relativeCoord, int size, levelOfDetailLimit[] LODLimits, Material material)
+        public TerrainChunk(Vector2 relativeCoord, int size, levelOfDetailLimit[] LODLimits, Material material, Biome biome)
         {
             this.LODLimits = LODLimits;
             this.relativeCoord = relativeCoord;
             this.material = material;
+            this.biome = biome;
 
-            worldPosition = new Vector3(relativeCoord.x * size, 0, relativeCoord.y * size);
+            scaledWorldPosition = new Vector3(relativeCoord.x * size, 0, relativeCoord.y * size);
+            scaledWorldPosition *= _meshChunkScale;
             worldBounds = new Bounds(relativeCoord * size, Vector2.one * size); //Bounds calculations will only take X and Z world axes into consideration, hence the 2D position
 
             levelOfDetailMeshes = new LODMesh[LODLimits.Length];
@@ -147,6 +150,7 @@ public class endlessTerrain : MonoBehaviour {
             hasRecievedMapData = true;
 
             recievedTexture = TextureGenerator.GenerateColorTexture(mapData.noiseMap, mapData.colorMap);
+            artifactManager = new TCArtifactManager(mapData, biome, ArtifactGenerationManager._LODforArtifacts, scaledWorldPosition, _meshChunkScale, relativeCoord);
 
             UpdateVisibilityOrLOD(); //TO start rendering our chunk now
         }
@@ -160,9 +164,7 @@ public class endlessTerrain : MonoBehaviour {
 
             if (!shouldBeVisible && assignedChunkGO != null) //Needed because this method can also be called from callbacks
             {
-                assignedChunkGO.release();
-                disableAtifacts();
-                assignedChunkGO = null;
+                disableChunkGO();
             }
 
             //Going through all the LOD limits (but the last one, because the player cannot see past that one, and choosing the corrent LOD
@@ -193,7 +195,7 @@ public class endlessTerrain : MonoBehaviour {
                         //Setting the mesh
                         currentLevelOfDetailIndex = lodIndex;
                         assignedChunkGO.setMesh(lodMesh.mesh);
-                        enableArtifacts();
+                        artifactManager.enableArtifacts(lodMesh.meshLevelOfDetail);
                     }
                     else if (!lodMesh.hasRequestedMesh) lodMesh.RequestMesh(mapData);
                     //Otherwise we'll just have to wait and see if data has been recieved yet. 
@@ -208,7 +210,7 @@ public class endlessTerrain : MonoBehaviour {
         {
             assignedChunkGO.setMaterial(material);
             assignedChunkGO.setTexture(recievedTexture);
-            assignedChunkGO.transform.position = worldPosition * _meshChunkScale;
+            assignedChunkGO.transform.position = scaledWorldPosition;
             assignedChunkGO.transform.localScale = Vector3.one * _meshChunkScale;
         }
 
@@ -216,24 +218,8 @@ public class endlessTerrain : MonoBehaviour {
         {
             if (assignedChunkGO == null) return;
             assignedChunkGO.release();
-            disableAtifacts();
+            artifactManager.disableAtifacts();
             assignedChunkGO = null;
-        }
-
-        //Called inside of enableArtifacts
-        public void generateArtifacts()
-        {
-
-        }
-
-        public void enableArtifacts()
-        {
-
-        }
-
-        public void disableAtifacts()
-        {
-
         }
     }
 
@@ -245,7 +231,7 @@ public class endlessTerrain : MonoBehaviour {
     {
         public Mesh mesh;
         public bool hasRequestedMesh, hasRecievedMesh;
-        int meshLevelOfDetail;
+        public int meshLevelOfDetail { get; private set; }
 
         //To allow us to manually call UpdateVisibleChunks() when mesh data is recieved, since the only other chance to call that would be when the player has moved significantly
         System.Action updateCallback; 
@@ -281,5 +267,4 @@ public class endlessTerrain : MonoBehaviour {
         public int levelOfDetail;
         public float distanceUpperBound;
     }
-
 }
