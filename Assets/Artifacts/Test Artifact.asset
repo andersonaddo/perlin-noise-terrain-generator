@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5e78c79b1e132b4a906cb1338824307, type: 3}
-  m_Name: Test
+  m_Name: Test Artifact
   m_EditorClassIdentifier: 
   gameObject: {fileID: 1774175584187790, guid: 97b25f618591068488cbca6e23214eff, type: 2}
   perlinValueLowerBound: 0
