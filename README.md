@@ -1,5 +1,5 @@
 # Perlin Noise 3D Terrain Generator
-This is a terrain generator based off Perlin Noise. The core of it was made using Videos 1-9 of [Sebastian Lague's Video Series on Procedural Landmass Generation](https://www.youtube.com/watch?v=wbpMiKiSKm8&list=PLFt_AvWsXl0eBW2EiBtl_sxmDtSgZBxB3). 
+This is a terrain generator based off Perlin Noise. The core of it was made using Videos 1-9 of [Sebastian Lague's Video Series on Procedural Landmass Generation.](https://www.youtube.com/watch?v=wbpMiKiSKm8&list=PLFt_AvWsXl0eBW2EiBtl_sxmDtSgZBxB3)
 It utilizes multithreading.
 
 Here's a quick summary of how it generated infinite terrain:
@@ -19,6 +19,7 @@ Here's a quick summary of how it generated infinite terrain:
  - Object pooling was implimented into the gameObjects allocated to TerrainChunks. Initially, each TerrainChunk was given a permanent gameObject, whether they were active or not.
  
 Here's a video of the generator in action (artifacts hadn't been added yet, though):
-[[embed url=https://www.youtube.com/watch?v=nnDUjDxTEuk]]
+[![Alt text](https://img.youtube.com/vi/nnDUjDxTEuk/0.jpg)](https://www.youtube.com/watch?v=nnDUjDxTEuk)
+
 
 > Written with [StackEdit](https://stackedit.io/).
